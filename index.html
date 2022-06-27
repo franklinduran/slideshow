@@ -1,0 +1,181 @@
+<!-- Presentación en diapositivas utilizando HTML, CSS y Javascript -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Deslizador de diapositivas (Carrusel)</title>
+        <style>
+            /* Hacemos que el alto y ancho de cada elemento incluyan su ancho relleno y borde */
+            * {
+                box-sizing: border-box
+            }
+            /* Establecemos una fuente para nuestro body y todos sus elementos hijos y le quitamos sus margenes*/
+            body {
+                font-family: Arial, Helvetica, sans-serif; 
+                margin: 0;
+            }
+            /* Ocultamos todas las diapositivas por defecto */
+            .slide {
+                display: none
+            }
+            /* Hacemos que cada imagen se muestre centrada verticalmente */
+            img {
+                vertical-align: middle;
+            }
+            /* Establecemos el ancho máximo del deslizador y le decimos que tenga posición relativa */
+            .container {
+                max-width: 1000px;
+                position: relative;
+                margin: auto;
+            }
+            /* Hacemos que nuestros botones se vean atractivos y le decimos que tengan un posicionamiento absoluto */
+            .prev, .next {
+                cursor: pointer;
+                position: absolute;
+                top: 50%;
+                width: auto;
+                padding: 16px;
+                margin-top: -22px;
+                color: white;
+                font-weight: bold;
+                font-size: 18px;
+                transition: 0.6s ease;
+                border-radius: 0 3px 3px 0;
+                user-select: none;
+            }
+            /* Posicionamos el botón de siguiente a la derecha */
+            .next {
+                right: 0;
+                border-radius: 3px 0 0 3px;
+            }
+            /* Le damos un color más oscuros a los botones al pasar el mouse por encima */
+            .prev:hover, .next:hover {
+                background-color: rgba(0,0,0,0.8);
+            }
+            /* Posicionamos de forma absoluta el texto del caption y agregamos algunos estilos para que se vea mejor */
+            .caption {
+                color: #f2f2f2;
+                font-size: 15px;
+                padding: 8px 12px;
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+                background-color: rgba(0,0,0,0.4);
+            }
+            /* Hacemos que nuestros números indicativos resalten */
+            .text_number {
+                color: #f2f2f2;
+                font-size: 12px;
+                padding: 8px 12px;
+                position: absolute;
+                top: 8px;
+                left: 8px;
+                background-color: rgba(0,0,0,0.8);
+                border-radius: 50px;
+            }
+            /* Le damos un estilo por default a todos nuestros puntos o indicadores */
+            .dot {
+                cursor: pointer;
+                height: 15px;
+                width: 15px;
+                margin: 0 2px;
+                background-color: #bbb;
+                border-radius: 50%;
+                display: inline-block;
+                transition: background-color 0.6s ease;
+            }
+            /* Asignamos un color diferente al punto activo y cuando está el mouse encima */
+            .active, .dot:hover {
+                background-color: #717171;
+            }
+            /* Definimos una trasición de animacion suave para nuestras diapositivas */
+            .fade {
+                animation-name: fade;
+                animation-duration: 1.5s;
+            }
+            /* Creamos nuestra animación */
+            @keyframes fade {
+                from {opacity: .4} 
+                to {opacity: 1}
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Contenedor de todas diapositivas -->
+        <div class="container">
+            <!-- Contenedores de los elementos de cada diapositiva  -->
+            <div class="slide fade">
+                <div class="text_number">1 / 4</div>
+                <img src="https://cdn.pixabay.com/photo/2022/01/17/11/16/alpine-6944487_960_720.jpg" style="width:100%">
+                <div class="caption">Diapositiva 1</div>
+            </div>
+            <div class="slide fade">
+                <div class="text_number">2 / 4</div>
+                <img src="https://cdn.pixabay.com/photo/2019/07/27/15/24/sage-4367047_960_720.jpg" style="width:100%">
+                <div class="caption">Diapositiva 2</div>
+            </div>
+            <div class="slide fade">
+                <div class="text_number">3 / 4</div>
+                <img src="https://cdn.pixabay.com/photo/2021/11/22/16/45/sheeps-6816871_960_720.jpg" style="width:100%">
+                <div class="caption">Diapositiva 3</div>
+            </div>
+            <div class="slide fade">
+                <div class="text_number">4 / 4</div>
+                <img src="https://cdn.pixabay.com/photo/2022/06/15/23/08/germany-7264701_960_720.jpg" style="width:100%">
+                <div class="caption">Diapositiva 4</div>
+            </div>
+            <!-- Botones de siguiente y atrás -->
+            <a class="prev" onclick="handleSlides(-1)">❮</a>
+            <a class="next" onclick="handleSlides(1)">❯</a>
+        </div>
+        <br>
+        <!-- Thumnails (Puntos) -->
+        <div style="text-align:center">
+            <span class="dot" onclick="currentSlide(0)"></span> 
+            <span class="dot" onclick="currentSlide(1)"></span> 
+            <span class="dot" onclick="currentSlide(2)"></span> 
+            <span class="dot" onclick="currentSlide(3)"></span> 
+        </div>
+    </body>
+</html>
+<script>
+
+    let index = 0
+
+    document.getElementsByClassName("slide")[index].style.display = "block"
+    document.getElementsByClassName("dot")[0].classList.add("active")
+
+    // Función para manejar las diapositivas a través de los thumnails (Puntos)
+    function currentSlide(n) {
+        index = 0
+        handleSlides(n)
+    }
+
+    // Función para mostrar la diapositiva correspondiente
+    function handleSlides(num){
+        index += num
+                
+        // Obtenemos todas las diapositivas y thumnails
+        let slides = document.getElementsByClassName("slide")
+        let dots = document.getElementsByClassName("dot")
+                
+        // Validamos el rango de las diapositivas 
+        if (index >= slides.length) index = 0;
+        if (index < 0) index = slides.length-1;
+
+        // Ocultamos todas nuestras diapositivas 
+        for (element of slides) {
+            element.style.display = "none" 
+        }
+
+        // Hacemos que todos los puntos se muestren inactivos
+        for(element of dots){
+            element.classList.remove("active")
+        }
+
+        // Mostramos la diapositiva y su thumnail correspondiente 
+        slides[index].style.display = "block"
+        dots[index].classList.add("active")
+    }
+</script>
